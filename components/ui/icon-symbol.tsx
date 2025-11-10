@@ -1,7 +1,8 @@
 // Fallback for using MaterialIcons on Android and web.
 
+import { FontAwesome5 } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { SymbolWeight, SymbolViewProps } from 'expo-symbols';
+import { SymbolViewProps, SymbolWeight } from 'expo-symbols';
 import { ComponentProps } from 'react';
 import { OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native';
 
@@ -14,11 +15,12 @@ type IconSymbolName = keyof typeof MAPPING;
  * - see SF Symbols in the [SF Symbols](https://developer.apple.com/sf-symbols/) app.
  */
 const MAPPING = {
-  'house.fill': 'home-work',
-  'paperplane.fill': 'library-books',
+  'house.fill': 'tachometer-alt',
+  'paperplane.fill': 'wpexplorer',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'keyboard-arrow-right',
-  'add.circle.fill': 'add',
+  'add.circle.fill': 'plus',
+  'usergraduate': 'user-graduate',
 } as unknown as IconMapping;
 
 /**
@@ -38,5 +40,9 @@ export function IconSymbol({
   style?: StyleProp<TextStyle>;
   weight?: SymbolWeight;
 }) {
-  return <MaterialIcons color={color} size={size} name={MAPPING[name]} style={style} />;
+  return <FontAwesome5 color={color} size={size} name={MAPPING[name]} style={style} />;
 }
+
+
+
+

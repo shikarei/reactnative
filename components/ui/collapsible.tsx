@@ -1,5 +1,5 @@
 import { PropsWithChildren, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -7,12 +7,18 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
-export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
+// 🟢 Tambahkan prop "style" agar bisa dikirim dari luar
+export function Collapsible({
+  children,
+  title,
+  style,
+}: PropsWithChildren & { title: string; style?: StyleProp<ViewStyle> }) {
   const [isOpen, setIsOpen] = useState(false);
   const theme = useColorScheme() ?? 'light';
 
   return (
-    <ThemedView>
+    // 🟢 Tambahkan style di sini biar ThemedView utama menerima style dari luar
+    <ThemedView style={style}>
       <TouchableOpacity
         style={styles.heading}
         onPress={() => setIsOpen((value) => !value)}
@@ -24,9 +30,10 @@ export function Collapsible({ children, title }: PropsWithChildren & { title: st
           color={theme === 'light' ? Colors.light.icon : Colors.dark.icon}
           style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
         />
-
         <ThemedText type="defaultSemiBold">{title}</ThemedText>
       </TouchableOpacity>
+
+      {/* 🟢 Isi collapsible ditampilkan hanya saat terbuka */}
       {isOpen && <ThemedView style={styles.content}>{children}</ThemedView>}
     </ThemedView>
   );
