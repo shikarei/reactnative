@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 
 import { Collapsible } from '@/components/ui/collapsible';
 import { ExternalLink } from '@/components/external-link';
@@ -12,6 +13,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default function TabTwoScreen() {
+  const router = useRouter();
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#4c2a85', dark: '#1a103d' }}
@@ -117,7 +120,7 @@ export default function TabTwoScreen() {
         })}
       </Collapsible>
 
-      <TouchableOpacity style={styles.fab}>
+      <TouchableOpacity style={styles.fab} onPress={() => router.push('/forminput')}>
         <IconSymbol
           size={32}
           color="#ffffff"

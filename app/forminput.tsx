@@ -1,12 +1,36 @@
 import React from 'react';
-import { StyleSheet, TextInput, Text, View, ImageBackground, Button } from 'react-native';
+import { StyleSheet, TextInput, Text, View, ImageBackground, Button, Alert } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
+import { getDatabase, ref, set } from 'firebase/database';
 
 const TextInputExample = () => {
     const [nama, setNama] = React.useState('');
     const [nim, setNim] = React.useState('');
     const [kelas, setKelas] = React.useState('');
+    const router = useRouter();
+
+    const handleSave = () => {
+        if (nama && nim && kelas) {
+            const db = getDatabase();
+            const studentRef = ref(db, 'students/' + nim);
+            set(studentRef, {
+                nama: nama,
+                nim: nim,
+                kelas: kelas,
+            }).then(() => {
+                Alert.alert('Success', 'Data berhasil disimpan');
+                setNama('');
+                setNim('');
+                setKelas('');
+                router.back();
+            }).catch((error) => {
+                Alert.alert('Error', 'Gagal menyimpan data: ' + error.message);
+            });
+        } else {
+            Alert.alert('Error', 'Semua field harus diisi');
+        }
+    };
 
     return (
         <SafeAreaProvider>
@@ -33,6 +57,8 @@ const TextInputExample = () => {
                             style={styles.input}
                             placeholder="Isikan Nama"
                             placeholderTextColor="#B3B3B3"
+                            value={nama}
+                            onChangeText={setNama}
                         />
                     </View>
 
@@ -43,6 +69,8 @@ const TextInputExample = () => {
                             placeholder="Isikan NIM"
                             placeholderTextColor="#B3B3B3"
                             keyboardType="numeric"
+                            value={nim}
+                            onChangeText={setNim}
                         />
                     </View>
 
@@ -52,16 +80,17 @@ const TextInputExample = () => {
                             style={styles.input}
                             placeholder="Isikan Kelas"
                             placeholderTextColor="#B3B3B3"
+                            value={kelas}
+                            onChangeText={setKelas}
                         />
                     </View>
 
                     <View style={styles.button}>
-                        <Button title="SAVE" color="#4F46E5" />
+                        <Button title="SAVE" color="#4F46E5" onPress={handleSave} />
                     </View>
                 </SafeAreaView>
             </ImageBackground>
         </SafeAreaProvider>
-
     );
 };
 
@@ -71,7 +100,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: 'rgba(109, 91, 169, 0.6)', // transparan agar gambar tetap kelihatan
+        backgroundColor: 'rgba(109, 91, 169, 0.6)',
         paddingHorizontal: 20,
         paddingTop: 40,
     },
